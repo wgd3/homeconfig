@@ -1,0 +1,12 @@
+.DS_Store
+
+# no need to check virtualenv into VCS
+venv/*
+
+# hide sensitive ansible files
+infra/password_file
+infra/secrets.yml
+
+# these ansible files are encrypted anyway
+infra/group_vars/all.yml
+infra/host_vars/*.yml
