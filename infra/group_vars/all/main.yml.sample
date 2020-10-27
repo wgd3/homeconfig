@@ -1,0 +1,3 @@
+---
+ansible_ssh_user: <username>   # in my case, all inventory hosts use the same remote user
+ansible_ssh_private_key_file: <absolute path to private key>   # like username, a specific private key is used for all hosts

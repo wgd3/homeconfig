@@ -6,3 +6,10 @@ roland
 roland
 superintendent
 reach
+
+[raspberry_pis]
+roland
+superintendent
+
+[centos]
+reach

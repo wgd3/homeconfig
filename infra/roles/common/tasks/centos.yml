@@ -1,0 +1,9 @@
+- name: Add EPEL
+  yum:
+    name: epel-release
+    state: latest
+
+- name: Upgrade all packages to the latest version
+  yum:
+    name: "*"
+    state: latest

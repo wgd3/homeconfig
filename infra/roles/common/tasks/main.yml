@@ -1,0 +1,22 @@
+---
+- name: Update Raspbian Hosts
+  include_tasks: raspbian.yml
+  when: "'raspberry_pis' in group_names"
+  tags:
+    - packaging
+
+- name: Update CentOS Hosts
+  include_tasks: centos.yml
+  when: "'centos' in group_names"
+  tags:
+    - packaging
+
+- name: Update /etc/hosts
+  copy:
+    src: etc_hosts
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+    decrypt: yes
