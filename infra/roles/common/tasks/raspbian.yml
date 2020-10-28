@@ -1,8 +1,26 @@
 - name: Update Repo Data
   apt:
     update_cache: yes
+  tags:
+    - packaging
 
 - name: Upgrade all packages to the latest version
   apt:
     name: "*"
     state: latest
+  tags:
+    - packaging
+
+- name: Add universal additional packages
+  apt:
+    name: '{{ additional_packages }}'
+    state: present
+  tags:
+    - packaging
+
+- name: Add Debian-specific packages
+  apt:
+    name: '{{ debian_additional_packages }}'
+    state: present
+  tags:
+    - packaging

@@ -1,0 +1,12 @@
+- name: Remove Login Banner
+  file:
+    path: /etc/issue.net
+    state: absent
+  when: not use_login_banner
+
+- name: Set Up Login Banner
+  copy:
+    src: etc_issue.net
+    dest: /etc/issue.net
+    backup: yes
+  when: use_login_banner

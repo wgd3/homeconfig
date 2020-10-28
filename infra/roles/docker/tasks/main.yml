@@ -1,0 +1,20 @@
+---
+- name: detect docker
+  shell: docker info
+  become: yes
+  register: docker_result
+  ignore_errors: yes
+
+- name: set up docker for CentOS
+  include_tasks: centos.yml
+  when: "ansible_os_family == 'RedHat' and docker_result.rc != 0"
+
+- name: set up docker for Raspbian
+  include_tasks: raspbian.yml
+  when: "ansible_os_family == 'Debian' and docker_result.rc != 0"
+
+- name: make sure docker is enabled and running
+  systemd:
+    name: docker
+    enabled: yes
+    state: started

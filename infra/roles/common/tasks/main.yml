@@ -20,3 +20,30 @@
     mode: '0644'
     backup: yes
     decrypt: yes
+
+- name: Install dotfiles
+  copy:
+    src: ../../../../dotfiles/
+    dest: /home/wallace
+
+- name: Set Up Homebrew
+  include_tasks: homebrew.yml
+  when: install_homebrew
+  tags:
+    - homebrew
+
+- name: Backup sshd config before updates
+  copy:
+    src: /etc/ssh/sshd_config
+    remote_src: yes
+    dest: /etc/ssh/sshd_config
+    backup: yes
+
+- name: Configure Login Banner
+  include_tasks: banner.yml
+
+- name: Configure Host MotD
+  include_tasks: motd.yml
+
+- name: Configure sshd
+  include_tasks: ssh_config.yml

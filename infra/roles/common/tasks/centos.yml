@@ -2,8 +2,26 @@
   yum:
     name: epel-release
     state: latest
+  tags:
+    - packaging
 
 - name: Upgrade all packages to the latest version
   yum:
     name: "*"
     state: latest
+  tags:
+    - packaging
+
+- name: Install universal additional packages
+  yum:
+    name: '{{ additional_packages }}'
+    state: present
+  tags:
+    - packaging
+
+- name: Install Red Hat-specific packages
+  yum:
+    name: '{{ redhat_additional_packages }}'
+    state: latest
+  tags:
+    - packaging

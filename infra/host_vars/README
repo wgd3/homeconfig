@@ -1,1 +1,4 @@
-Each host in inventory has a vault-encrypted YAML file in this directory which simply defines the `ansible_host` property with a static IP address
+Each host in inventory has a vault-encrypted YAML file in this directory which defines a set of vars:
+
+- `ansible_host`  the static IP address for that host
+- `motd_avatar` (optional) if added, it will be used in the header for the MOTD

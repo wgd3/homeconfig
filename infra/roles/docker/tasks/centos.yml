@@ -1,0 +1,13 @@
+- name: Set up docker repo
+  shell:
+    cmd: "yum install -y yum-utils && yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+  become: yes
+
+- name: Install Docker
+  yum:
+    name: '{{ item }}'
+    state: latest
+  with_items:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io

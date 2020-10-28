@@ -1,0 +1,24 @@
+#!/bin/sh
+UPTIME_DAYS=$(expr `cat /proc/uptime | cut -d '.' -f1` % 31556926 / 86400)
+UPTIME_HOURS=$(expr `cat /proc/uptime | cut -d '.' -f1` % 31556926 % 86400 / 3600)
+UPTIME_MINUTES=$(expr `cat /proc/uptime | cut -d '.' -f1` % 31556926 % 86400 % 3600 / 60)
+
+cat << EOF
+###########################################################
+
+{{ hostvars[inventory_hostname].motd_avatar | default(ansible_hostname) }}
+# Hostname: {{ ansible_fqdn }}
+# Uptime: $UPTIME_DAYS days, $UPTIME_HOURS Hours, $UPTIME_MINUTES Minutes
+#
+# CPU: `cat /proc/cpuinfo | grep -c processor` Core `cat /proc/cpuinfo | grep 'model name' | head -1 | cut -d':' -f2`
+# Memory: `free -m | head -n 2 | tail -n 1 | awk {'print $2'}`MB
+# Swap: `free -m | tail -n 1 | awk {'print $2'}`MB
+# Distro: `lsb_release -s -d` with `uname -r`
+#
+# CPU Load: `cat /proc/loadavg | awk '{print $1 ", " $2 ", " $3}'`
+# Free Memory: `free -m | head -n 2 | tail -n 1 | awk {'print $4'}`MB
+#
+# Local IPv4 ({{ansible_default_ipv4.alias}}): `ifconfig {{ansible_default_ipv4.alias}} | grep 'inet\s' | awk  '{print $2}'`
+#
+###########################################################
+EOF

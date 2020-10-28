@@ -1,0 +1,96 @@
+- name: Update sshd AuthenticationMethods
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?AuthenticationMethods'
+    line: 'AuthenticationMethods publickey'
+
+- name: Update sshd PasswordAuthentication
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+
+- name: Update sshd ChallengeResponseAuthentication
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?ChallengeResponseAuthentication'
+    line: 'ChallengeResponseAuthentication no'
+
+- name: Update PubkeyAuthentication
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?PubkeyAuthentication'
+    line: 'PubkeyAuthentication yes'
+
+- name: Update SSH config to show login banner
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?Banner'
+    line: 'Banner /etc/issue.net'
+    state: present
+  when: use_login_banner
+  tags:
+    - motd
+
+- name: Update SSH config to hide login banner
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?Banner'
+    line: 'Banner none'
+    state: present
+  when: not use_login_banner
+  tags:
+    - motd
+
+- name: Update SSH config to hide standard MOTD
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?PrintMotd'
+    line: 'PrintMotd no'
+    state: present
+  when: "ansible_os_family == 'RedHat' and use_motd"
+  tags:
+    - motd
+
+- name: Update SSH config to use PAM
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?UsePAM'
+    line: 'UsePAM yes'
+    state: present
+  when: "ansible_os_family == 'RedHat' and use_motd"
+  tags:
+    - motd
+
+- name: Update SSH config to hide last login time
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?PrintLastLog'
+    line: 'PrintLastLog no'
+    state: present
+  tags:
+    - motd
+
+- name: Install PAM on CentOS for dynamic MOTD
+  ansible.builtin.yum:
+    name: https://github.com/gdubicki/centos-pam-with-update-motd/releases/download/1.1.8-1023.1/pam-1.1.8-1023.el7.x86_64.rpm
+    state: present
+  when: "ansible_os_family == 'RedHat' and use_motd"
+  tags:
+    - motd
+
+- name: Update PAM to render MOTD
+  ansible.builtin.lineinfile:
+    dest: /etc/pam.d/sshd
+    line: 'session optional pam_motd.so motd=/run/motd.dynamic'
+    state: present
+  when: "ansible_os_family == 'RedHat' and use_motd"
+  tags:
+    - motd
+
+- name: restart sshd
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+  tags:
+    - motd

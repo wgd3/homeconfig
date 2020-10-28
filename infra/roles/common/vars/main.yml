@@ -1,0 +1,45 @@
+#########################
+# Variables used during "common" role set up
+#########################
+
+# Homebrew
+install_homebrew: false
+homebrew_install_file: homebrew-install.sh
+homebrew_bin_path: ~/.linuxbrew/bin/brew
+homebrew_packages:
+  - pv
+  - tree
+  - git-lfs
+
+# Packages universal to all linux distros
+additional_packages:
+  - python3
+  - python-pip
+  - vim
+  - git
+  - htop
+  - wget
+  - curl
+  - python-docker
+
+# packages specific to raspbian/debian
+debian_additional_packages:
+  - ruby-full
+  - dnsutils
+
+# packages specific to CentOS/Red Hat
+redhat_additional_packages:
+  - bind-utils
+
+####################################
+# Banners and MotD
+####################################
+
+# toggles the login banner on the host
+#
+# Note: if true, there needs to be a `etc_issue.net` file in the files/
+# directory for this role
+use_login_banner: false
+
+# update the MotD for the host?
+use_motd: true

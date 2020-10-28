@@ -1,0 +1,39 @@
+- name: Check if homebrew is installed
+  stat:
+    path: "{{ homebrew_bin_path }}"
+  register: hb
+  become: no
+  tags:
+    - homebrew
+
+- name: Clone homebrew
+  shell: git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew
+  when: not hb.stat.exists
+  become: no
+  tags:
+    - homebrew
+
+- name: Set up homebrew dir
+  file:
+    path: ~/.linuxbrew/bin
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  when: not hb.stat.exists
+  become: no
+  tags:
+    - homebrew
+
+- name: Link homebrew binary
+  shell: ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin/brew
+  when: not hb.stat.exists
+  become: no
+  tags:
+    - homebrew
+
+- name: Add Homebrew to PATH
+  shell: "echo 'eval $(~/.linuxbrew/bin/brew shellenv)' >> /home/{{ ansible_ssh_user}}/.bash_profile"
+  when: not hb.stat.exists
+  become: no
+  tags:
+    - homebrew

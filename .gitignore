@@ -7,14 +7,14 @@ venv/*
 infra/password_file
 
 # hide the group and host var files
-infra/group_vars/all.yml
+infra/group_vars/**/*.yml
 infra/host_vars/**/*.yml
 
-# hide non-sample files and templates in roles
+# hide non-sample files in roles
 infra/roles/**/files/*
-infra/roles/**/templates/*
 
 # make sure we keep READMEs, samples, and gitkeep files
 !infra/**/.gitkeep
 !infra/**/README
 !infra/**/*.sample
+!infra/**/*.sh

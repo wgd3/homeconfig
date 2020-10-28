@@ -2,6 +2,15 @@
 - name: Common Tasks
   hosts: all
   become: yes
-  gather_facts: false
+  gather_facts: true
   roles:
     - common
+
+- name: Set Up Docker
+  hosts: docker_hosts
+  become: yes
+  gather_facts: true
+  roles:
+    - docker
+  tags:
+    - docker

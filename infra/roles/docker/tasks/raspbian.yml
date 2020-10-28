@@ -1,0 +1,9 @@
+- name: Get install script
+  shell:
+    cmd: curl -fsSL https://get.docker.com | sh
+  become: yes
+
+# - name: Run install script
+#   shell:
+#     cmd: ./get-docker.sh
+#   become: yes

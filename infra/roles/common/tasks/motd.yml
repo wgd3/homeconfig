@@ -1,0 +1,24 @@
+- name: Ensure MOTD folder exists
+  file:
+    path: /etc/update-motd.d
+    state: directory
+  when: use_motd
+  tags:
+    - motd
+
+- name: Remove old MOTD file
+  file:
+    path: /etc/motd
+    state: absent
+  when: use_motd
+  tags:
+    - motd
+
+- name: Add MOTD Header
+  ansible.builtin.template:
+    src: motd-10-header
+    dest: /etc/update-motd.d/10-header
+    mode: u=rwx,g=rx,o=rx
+  when: use_motd
+  tags:
+    - motd
