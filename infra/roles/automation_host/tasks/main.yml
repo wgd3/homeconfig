@@ -1,0 +1,45 @@
+- name: Ensure base home automation directory exists
+  become: yes
+  file:
+    path: "{{ base_ha_dir }}"
+    state: directory
+    mode: 0764
+    owner: "{{ ansible_ssh_user }}"
+    group: sudo
+    recurse: yes
+  tags:
+    - home_auto
+
+- name: Ensure home automation config directory exists
+  become: yes
+  file:
+    path: "{{ config_dir }}"
+    state: directory
+    mode: 0764
+    owner: "{{ ansible_ssh_user }}"
+    group: sudo
+    recurse: yes
+  tags:
+    - home_auto
+
+- name: Create docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ compose_file_path }}"
+    owner: "{{ ansible_ssh_user }}"
+    mode: 0664
+    group: sudo
+    lstrip_blocks: yes
+  tags:
+    - home_auto
+
+- name: Extra Grafana steps
+  include_tasks: grafana.yml
+
+- name: Bring up all services
+  community.general.docker_compose:
+    project_src: "{{ base_ha_dir }}"
+    project_name: "homeauto"
+  register: output
+  tags:
+    - home_auto

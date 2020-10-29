@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+
+{% for name, details in container_definitions.items() %}
+  ###################################################
+
+  {{ name }}:
+    container_name: {{ name }}
+    image: {{ details.image_name }}
+    restart: {{ container_restart_policy }}
+  {% if details.network_mode is defined %}
+    network_mode: {{ details.network_mode }}
+  {% endif %}
+  {% if details.config_dir_name is defined or details.volumes is defined %}
+    volumes:
+  {% endif %}
+  {% if details.config_dir_name is defined %}
+      - {{ config_dir }}/{{ name }}:{{details.config_dir_name | default(name) }}
+  {% endif %}
+  {% if details.volumes is defined %}
+    {% for host_dir, target_dir in details.volumes.items() %}
+      - {{ host_dir }}:{{ target_dir }}
+    {% endfor %}
+  {% endif %}
+  {% if details.env is defined %}
+    environment:
+    {% for name in details.env %}
+      {{ name }}: {{ details.env[name] }}
+    {% endfor %}
+  {% endif %}
+  {% if details.devices is defined %}
+    devices:
+    {% for dev in details.devices %}
+      - {{ dev }}:{{ dev }}
+    {% endfor %}
+  {% endif %}
+  {% if details.ports is defined %}
+    ports:
+    {% for port_map in details.ports %}
+    {#- these should be mapped already in the format 8080:8080 instead of a list of key/value pairs #}
+      - {{ port_map }}
+    {% endfor %}
+  {% endif %}
+
+  ###################################################
+{% endfor %}

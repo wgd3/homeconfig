@@ -1,0 +1,10 @@
+Infrastructure:
+
+- Add hostname settings to host_vars and related tasks
+- Set timezones for all hosts (under group_vars/all)
+- Add ability to create a main user on the host, and use that user for all non-root tasks (instead of assuming one has already been created)
+  - Update home_automation role to use this user's UID/GID automatically
+- Disable WiFi on RPi's
+- Make sure primary IPv4 interface is set to start on boot
+- Expose Docker daemon port to internal network for remote management?
+- Add Cockpit service installation (optional, configurable)

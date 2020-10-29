@@ -14,13 +14,15 @@ homebrew_packages:
 # Packages universal to all linux distros
 additional_packages:
   - python3
-  - python-pip
+  - python3-pip
   - vim
   - git
   - htop
   - wget
   - curl
   - python-docker
+  - hwinfo
+  - tree
 
 # packages specific to raspbian/debian
 debian_additional_packages:

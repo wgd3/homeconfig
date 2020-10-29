@@ -14,7 +14,21 @@
   when: "ansible_os_family == 'Debian' and docker_result.rc != 0"
 
 - name: make sure docker is enabled and running
-  systemd:
+  ansible.builtin.service:
     name: docker
     enabled: yes
     state: started
+
+- name: Create docker group on host
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: Add main user to docker group
+  ansible.builtin.user:
+    name: "{{ ansible_ssh_user }}"
+    groups: docker
+    append: yes
+
+- name: Reset SSH connection to recognize new groups
+  meta: reset_connection

@@ -1,0 +1,68 @@
+######################################
+#============== Global ==============#
+######################################
+
+# User/Group IDs for the user that runs docker containers
+docker_uid: 1001
+docker_gid: 1001
+
+# home automation directory (storing docker-compose.yml and config volumes)
+base_ha_dir: /opt/home_automation
+
+# Directory which will contain the /config volume for all containers
+config_dir: "{{ base_ha_dir }}/configs"
+
+# Directory which will house the docker-compose.yml file for home automation containers
+compose_file_path: "{{ base_ha_dir }}/docker-compose.yml"
+
+# Some containers need a time zone defined
+timezone: America/New_York
+
+# how to handle stopped container
+container_restart_policy: always
+
+container_definitions:
+    ##########################################
+    #============== HomeBridge ==============#
+    ##########################################
+    homebridge:
+      image_name: oznu/homebridge
+      name: homebridge
+      config_dir_name: /homebridge
+      network_mode: host
+      env:
+        HOMEBRIDGE_CONFIG_UI: 1
+        HOMEBRIDGE_CONFIG_UI_PORT: 8080
+        PUID: "{{ docker_uid }}"
+        PGID: "{{ docker_gid }}"
+        TZ: "{{ timezone }}"
+        HOMEBRIDGE_DEBUG: 1
+    #############################################
+    #============== HomeAssistant ==============#
+    #############################################
+    homeassistant:
+      # NOTE - this needs to be set for RPi images if the host is a RPi
+      image_name: homeassistant/raspberrypi4-homeassistant
+      name: homeassistant
+      config_dir_name: /config
+      network_mode: host
+      env:
+        TZ: "{{ timezone }}"
+        PUID: "{{ docker_uid }}"
+        PGID: "{{ docker_gid }}"
+    #######################################
+    #============== Grafana ==============#
+    #######################################
+    grafana:
+      image_name: grafana/grafana:latest
+      name: grafana
+      ports:
+        - 3000:3000
+      config_dir_name: /config
+      env:
+        PUID: "{{ docker_uid }}"
+        PGID: "{{ docker_gid }}"
+        GF_PATHS_DATA: /config/data
+        GF_PATHS_LOGS: /config/logs
+        GF_PATHS_PLUGINS: /config/plugins
+        GF_INSTALL_PLUGINS: grafana-piechart-panel,grafana-worldmap-panel

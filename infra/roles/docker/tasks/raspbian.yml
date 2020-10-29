@@ -3,7 +3,7 @@
     cmd: curl -fsSL https://get.docker.com | sh
   become: yes
 
-# - name: Run install script
-#   shell:
-#     cmd: ./get-docker.sh
-#   become: yes
+- name: install docker-compose
+  ansible.builtin.pip:
+    name: docker-compose
+    state: latest

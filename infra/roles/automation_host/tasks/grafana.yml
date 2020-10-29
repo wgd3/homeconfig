@@ -1,0 +1,15 @@
+# this task is included to account for the specific file ownership needs
+# of the grafana container
+#
+# https://grafana.com/docs/grafana/latest/installation/docker/#migrate-to-v51-or-later
+- name: make sure config dir exists
+  become: yes
+  file:
+    path: "{{ config_dir }}/grafana"
+    state: directory
+    owner: '472'
+    group: "{{ ansible_ssh_user }}"
+    recurse: yes
+    mode: 0774
+  tags:
+    - home_auto

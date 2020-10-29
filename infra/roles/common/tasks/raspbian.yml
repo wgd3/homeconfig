@@ -24,3 +24,13 @@
     state: present
   tags:
     - packaging
+
+- name: Make sure python3 is available as an alternative
+  shell: update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+  tags:
+    - python
+
+- name: Set python3 as the system default
+  shell: update-alternatives --set python /usr/bin/python3
+  tags:
+    - python

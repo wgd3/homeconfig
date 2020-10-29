@@ -6,7 +6,7 @@
   tags:
     - motd
 
-- name: Remove old MOTD file
+- name: Remove old static MOTD file
   file:
     path: /etc/motd
     state: absent

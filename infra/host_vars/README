@@ -2,3 +2,4 @@ Each host in inventory has a vault-encrypted YAML file in this directory which d
 
 - `ansible_host`  the static IP address for that host
 - `motd_avatar` (optional) if added, it will be used in the header for the MOTD
+- `rpi_model` (optional) if a host is a RPi, this should be set to 'raspberrypi4' or 'raspberrypi3' accordinly

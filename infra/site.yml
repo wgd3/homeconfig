@@ -14,3 +14,11 @@
     - docker
   tags:
     - docker
+
+- name: Set Up Home Automation Containers
+  hosts:
+    - roland
+  roles:
+    - automation_host
+  tags:
+    - home_auto

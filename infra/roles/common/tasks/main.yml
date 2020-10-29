@@ -24,7 +24,9 @@
 - name: Install dotfiles
   copy:
     src: ../../../../dotfiles/
-    dest: /home/wallace
+    dest: "/home/{{ ansible_ssh_user }}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
 
 - name: Set Up Homebrew
   include_tasks: homebrew.yml
